@@ -27,7 +27,7 @@ jobs:
           path: junit/test-results.xml
 
           build:
-needs: test
+        needs: test
 permissions:
     id-token: write    
 runs-on: ubuntu-latest
