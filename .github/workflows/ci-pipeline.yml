@@ -40,7 +40,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_URL }}          
   build:
-    needs: test
+    needs: [sonarqube, dast]
     permissions:
       id-token: write    
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
             tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:latest
 
   dast:
-    needs: [test, sonarqube]
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -127,7 +127,7 @@ jobs:
           path: report_json.json
 
   submit_results:
-    needs: [build]
+    needs: build
     if: true
     runs-on: ubuntu-latest
     steps:
