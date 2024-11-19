@@ -127,7 +127,7 @@ jobs:
           path: report_json.json
 
   submit_results:
-   needs: [build]
+   needs: build
    if: true
    runs-on: ubuntu-latest
    steps:
