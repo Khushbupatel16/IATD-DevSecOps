@@ -52,25 +52,30 @@ jobs:
        name: sonarqube-report
        path: sonarqube-report.json        
   build:
-    needs: [sonarqube, dast]
-    permissions:
-      id-token: write    
+    needs: []
+    if: true
     runs-on: ubuntu-latest
     steps:
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v3
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v3
-        - name: Login to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
-        - name: Build and push
-          uses: docker/build-push-action@v5
-          with:     
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:latest
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          sbom: true
+          provenance: true
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:lates
 
   dast:
     needs: test
